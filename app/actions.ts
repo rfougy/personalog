@@ -5,6 +5,28 @@ import { createClient } from '@/utils/supabase/server';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+export const insertAction = async (
+  table: string,
+  query: { [title: string]: any }
+) => {
+  const supabase = await createClient();
+
+  const { data: session, error } = await supabase.auth.getUser();
+
+  if (session) {
+    const { data, error } = await supabase.from(table).insert([query]).select();
+
+    if (error) {
+      console.error(`Error creating row in ${table}:`, error);
+    } else {
+      console.log(`New row created for ${table}:`, data);
+      return data;
+    }
+  } else {
+    console.error('Error fetching user data:', error);
+  }
+};
+
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString();
   const password = formData.get('password')?.toString();

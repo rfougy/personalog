@@ -1,7 +1,15 @@
 import { createClient } from '@/utils/supabase/server';
+import { CreateEntryButton } from './components';
 
 export default async function SupabaseDataPage() {
   const supabase = await createClient();
+
+  // Check if the user is signed in
+  const { data: session, error } = await supabase.auth.getUser();
+
+  // Extract the user ID from the session
+  const userId = session.user?.id;
+  console.log('User ID: ', userId);
 
   const [
     { data: entries, error: entriesError },
@@ -40,6 +48,7 @@ export default async function SupabaseDataPage() {
     <div className="flex flex-col gap-4">
       <div>
         <h2>Create Data via User Account</h2>
+        {userId && <CreateEntryButton userId={userId} />}
         <div className="border bg-white" />
       </div>
       <div>
