@@ -5,48 +5,35 @@ export default async function SupabaseDataPage() {
 
   const [
     { data: entries, error: entriesError },
-    { data: hashtags, error: hashtagsError },
     { data: logs, error: logsError },
-    { data: metadata, error: metadataError },
-    { data: entriesHashtags, error: entriesHashtagsError },
     { data: entriesLogs, error: entriesLogsError },
-    { data: entriesMetadata, error: entriesMetadataError },
+    { data: usersEntries, error: usersEntriesError },
+    { data: usersLogs, error: usersLogsError },
   ] = await Promise.all([
     supabase.from('entries').select('*'),
-    supabase.from('hashtags').select('*'),
     supabase.from('logs').select('*'),
-    supabase.from('metadata').select('*'),
-    supabase
-      .from('entries_hashtags')
-      .select('entry_id, hashtag_id, hashtags(*), entries(*)'),
     supabase
       .from('entries_logs')
       .select('entry_id, log_id, logs(*), entries(*)'),
-    supabase
-      .from('entries_metadata')
-      .select('entry_id, metadata_id, metadata(*), entries(*)'),
+    supabase.from('users_logs').select('*'),
+    supabase.from('users_entries').select('*'),
   ]);
 
   // Log errors if any
   if (entriesError) console.error('Entries Error:', entriesError);
-  if (hashtagsError) console.error('Hashtags Error:', hashtagsError);
   if (logsError) console.error('Logs Error:', logsError);
-  if (metadataError) console.error('Metadata Error:', metadataError);
-  if (entriesHashtagsError)
-    console.error('Entries Hashtags Error:', entriesHashtagsError);
   if (entriesLogsError) console.error('Entries Logs Error:', entriesLogsError);
-  if (entriesMetadataError)
-    console.error('Entries Metadata Error:', entriesMetadataError);
+  if (usersEntriesError)
+    console.error('Users Entries Error:', usersEntriesError);
+  if (usersLogsError) console.error('Users Logs Error:', usersLogsError);
 
   // Combine data for rendering, including data from junction tables and related entries
   const combinedData = {
     entries,
-    hashtags,
     logs,
-    metadata,
-    entriesHashtags,
     entriesLogs,
-    entriesMetadata,
+    usersEntries,
+    usersLogs,
   };
 
   return (
