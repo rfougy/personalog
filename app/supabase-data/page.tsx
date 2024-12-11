@@ -49,5 +49,16 @@ export default async function SupabaseDataPage() {
     entriesMetadata,
   };
 
-  return <pre>{JSON.stringify(combinedData, null, 2)}</pre>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h2>Create Data via User Account</h2>
+        <div className="border bg-white" />
+      </div>
+      <div>
+        <h2>Raw Supabase Data</h2>
+        <pre>{JSON.stringify(combinedData, null, 2)}</pre>
+      </div>
+    </div>
+  );
 }
