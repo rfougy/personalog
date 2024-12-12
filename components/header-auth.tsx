@@ -24,7 +24,8 @@ export default async function AuthButton() {
 
   if (error) console.error(error);
 
-  const firstName = data && data[0].profiles.name.split(' ')[0];
+  const profile = data && data[0].profiles;
+  const firstName = profile?.name.split(' ')[0];
 
   if (!hasEnvVars) {
     return (
@@ -64,7 +65,7 @@ export default async function AuthButton() {
   }
   return user ? (
     <div className="flex items-center gap-4">
-      {firstName}
+      <Link href={`/${profile?.username}`}>Riviere</Link>
       <Button asChild size="sm" variant={'outline'}>
         <Link href="/new">+</Link>
       </Button>
