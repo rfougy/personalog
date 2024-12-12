@@ -11,7 +11,7 @@ export function MarkdownEditor() {
   const [activeTab, setActiveTab] = useState<string>('write');
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-background">
       <Toolbar actions={actions} />
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
         <TabsList>

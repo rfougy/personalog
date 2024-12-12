@@ -19,7 +19,7 @@ interface ToolbarProps {
 
 export function Toolbar({ actions }: ToolbarProps) {
   return (
-    <div className="flex flex-wrap gap-2 p-2 bg-gray-100 border-b">
+    <div className="flex flex-wrap gap-2 p-2 border-b rounded-md">
       <Button variant="outline" size="icon" onClick={actions.bold}>
         <Bold className="h-4 w-4" />
       </Button>

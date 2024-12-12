@@ -9,7 +9,7 @@ export default async function NewPage() {
   const userId = session.user?.id;
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen">
       <h2>New Page</h2>
       <MarkdownEditor />
     </main>
