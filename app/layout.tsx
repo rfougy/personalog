@@ -40,7 +40,10 @@ export default function RootLayout({
                     <Link href={'/'}>PERSONALOG</Link>
                     <ThemeSwitcher />
                   </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                  <div className="flex gap-2 items-center font-semibold">
+                    <Link href={'/'}>PERSONALOG</Link>
+                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                  </div>
                 </div>
               </nav>
               <div className="flex flex-col gap-20 max-w-5xl p-5">
