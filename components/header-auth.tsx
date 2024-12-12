@@ -12,21 +12,6 @@ export default async function AuthButton() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase
-    .from('users_profiles')
-    .select(
-      `
-      profiles(*),
-      user_id
-    `
-    )
-    .eq('user_id', user?.id);
-
-  if (error) console.error(error);
-
-  const profile = data && data[0].profiles;
-  const firstName = profile?.name.split(' ')[0];
-
   if (!hasEnvVars) {
     return (
       <>
@@ -65,7 +50,6 @@ export default async function AuthButton() {
   }
   return user ? (
     <div className="flex items-center gap-4">
-      <Link href={`/${profile?.username}`}>Riviere</Link>
       <Button asChild size="sm" variant={'outline'}>
         <Link href="/new">+</Link>
       </Button>

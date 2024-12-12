@@ -17,6 +17,10 @@ export default async function UserProfile({ params }: UserProfileProps) {
     .eq('username', username)
     .single();
 
+  const name = profile?.nickname
+    ? profile?.nickname
+    : profile?.name.split(' ')[0];
+
   return error ? (
     <div>
       <h1>User not found</h1>
@@ -24,7 +28,7 @@ export default async function UserProfile({ params }: UserProfileProps) {
     </div>
   ) : (
     <main className="min-h-screen flex flex-col gap-4">
-      <h2 className="font-bold">{profile.name.split(' ')[0]}'s Personalog</h2>
+      <h2 className="font-bold">{name}'s Personalog</h2>
     </main>
   );
 }
