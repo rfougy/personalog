@@ -11,13 +11,15 @@ export function MarkdownEditor() {
   const [activeTab, setActiveTab] = useState<string>('write');
 
   return (
-    <div className="container mx-auto p-4 bg-background">
-      <Toolbar actions={actions} />
+    <div className="bg-background">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
-        <TabsList>
-          <TabsTrigger value="write">Write</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between">
+          <Toolbar actions={actions} />
+          <TabsList>
+            <TabsTrigger value="write">Write</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="write">
           <textarea
             className="w-full h-[calc(100vh-200px)] p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
