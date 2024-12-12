@@ -5,13 +5,14 @@ import { useMarkdownEditor } from '../hooks/useMarkdownEditor';
 import { Toolbar } from './toolbar';
 import { Preview } from './preview';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { CreateEntryButton } from '@/app/supabase-data/components';
 
-export function MarkdownEditor() {
+export function MarkdownEditor({ userId }: { userId: string | undefined }) {
   const { value, handleChange, actions } = useMarkdownEditor();
   const [activeTab, setActiveTab] = useState<string>('write');
 
   return (
-    <div className="bg-background">
+    <div className="bg-transparent flex flex-col gap-4">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
         <div className="flex items-center justify-between">
           <Toolbar actions={actions} />
@@ -34,6 +35,7 @@ export function MarkdownEditor() {
           </div>
         </TabsContent>
       </Tabs>
+      {userId && <CreateEntryButton userId={userId} content={value} />}
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default async function NewPage() {
   return (
     <main className="min-h-screen">
       <h2>New Entry</h2>
-      <MarkdownEditor />
+      <MarkdownEditor userId={userId} />
     </main>
   );
 }

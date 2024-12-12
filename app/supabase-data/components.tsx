@@ -1,11 +1,17 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { insertAction } from '../actions';
 
-export const CreateEntryButton: React.FC<{ userId: string }> = ({ userId }) => {
+export const CreateEntryButton: React.FC<{
+  userId: string;
+  content?: string;
+}> = ({ userId, content }) => {
   const createEntry = async () => {
+    console.log('content: ', content);
     const entry = await insertAction('entries', {
-      title: 'Test Entry Submitted from App',
+      title: 'MD Test Entry Submitted from App',
+      content: content,
       created_by: userId,
     });
     console.log('Insert Result:', entry);
@@ -19,7 +25,11 @@ export const CreateEntryButton: React.FC<{ userId: string }> = ({ userId }) => {
     console.log('Insert Result:', usersEntries);
   };
 
-  return <button onClick={createEntry}>Create Test Entry</button>;
+  return (
+    <Button type="submit" variant={'outline'} onClick={createEntry}>
+      Create Test Entry
+    </Button>
+  );
 };
 
 export const CreateLogButton: React.FC<{ userId: string }> = ({ userId }) => {
