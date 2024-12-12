@@ -5,12 +5,13 @@ import { insertAction } from '../actions';
 
 export const CreateEntryButton: React.FC<{
   userId: string;
-  content?: string;
-}> = ({ userId, content }) => {
+  title: string;
+  content: string;
+}> = ({ userId, title, content }) => {
   const createEntry = async () => {
     console.log('content: ', content);
     const entry = await insertAction('entries', {
-      title: 'MD Test Entry Submitted from App',
+      title: title,
       content: content,
       created_by: userId,
     });

@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { CreateEntryButton, CreateLogButton } from './components';
 
 export default async function SupabaseDataPage() {
   const supabase = await createClient();
@@ -47,8 +46,6 @@ export default async function SupabaseDataPage() {
     <div className="flex flex-col gap-4">
       <div>
         <h2>Create Data via User Account</h2>
-        {userId && <CreateEntryButton userId={userId} />}
-        {userId && <CreateLogButton userId={userId} />}
         <div className="border bg-white" />
       </div>
       <div>
