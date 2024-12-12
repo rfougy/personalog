@@ -22,10 +22,10 @@ export function MarkdownEditor() {
         </div>
         <TabsContent value="write">
           <textarea
-            className="w-full h-[calc(100vh-200px)] p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-[calc(100vh-200px)] p-4 border resize-none rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            placeholder="Start writing your Markdown here..."
+            placeholder="Start writing your entry here..."
           />
         </TabsContent>
         <TabsContent value="preview">
