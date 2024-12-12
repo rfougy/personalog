@@ -2,12 +2,15 @@
 
 import { Button } from '@/components/ui/button';
 import { insertAction } from '../actions';
+import { useToast } from '@/hooks/use-toast';
 
 export const CreateEntryButton: React.FC<{
   userId: string;
   title: string;
   content: string;
 }> = ({ userId, title, content }) => {
+  const { toast } = useToast();
+
   const createEntry = async () => {
     console.log('content: ', content);
     const entry = await insertAction('entries', {
@@ -23,6 +26,12 @@ export const CreateEntryButton: React.FC<{
       entry_id: entryId,
       user_id: userId,
     });
+
+    toast({
+      title: `'${title}' Created.`,
+      description: `user: ${userId}, content: ${content}`,
+    });
+
     console.log('Insert Result:', usersEntries);
   };
 

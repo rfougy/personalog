@@ -1,4 +1,3 @@
-import DeployButton from '@/components/deploy-button';
 import { EnvVarWarning } from '@/components/env-var-warning';
 import HeaderAuth from '@/components/header-auth';
 import { ThemeSwitcher } from '@/components/theme-switcher';
@@ -7,6 +6,8 @@ import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import Link from 'next/link';
 import './globals.css';
+import { ToastProvider } from '@/components/ui/toast';
+import { Toaster } from '@/components/ui/toaster';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -32,27 +33,30 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-2 items-center font-semibold">
-                    <Link href={'/'}>PERSONALOG</Link>
-                    <ThemeSwitcher />
+          <ToastProvider>
+            <main className="min-h-screen flex flex-col items-center">
+              <Toaster />
+              <div className="flex-1 w-full flex flex-col gap-20 items-center">
+                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+                  <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+                    <div className="flex gap-2 items-center font-semibold">
+                      <Link href={'/'}>PERSONALOG</Link>
+                      <ThemeSwitcher />
+                    </div>
+                    <div className="flex gap-2 items-center font-semibold">
+                      {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                    </div>
                   </div>
-                  <div className="flex gap-2 items-center font-semibold">
-                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                  </div>
+                </nav>
+                <div className="flex flex-col gap-20 w-full max-w-5xl p-5">
+                  {children}
                 </div>
-              </nav>
-              <div className="flex flex-col gap-20 w-full max-w-5xl p-5">
-                {children}
+                <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
+                  <p>Personalog, 2025</p>
+                </footer>
               </div>
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <p>Personalog, 2025</p>
-              </footer>
-            </div>
-          </main>
+            </main>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
