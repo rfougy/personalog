@@ -23,8 +23,8 @@ export default async function SupabaseDataPage() {
     supabase
       .from('entries_logs')
       .select('entry_id, log_id, logs(*), entries(*)'),
-    supabase.from('users_logs').select('*'),
     supabase.from('users_entries').select('*'),
+    supabase.from('users_logs').select('*'),
   ]);
 
   // Log errors if any
