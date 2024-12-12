@@ -41,7 +41,6 @@ export default function RootLayout({
                     <ThemeSwitcher />
                   </div>
                   <div className="flex gap-2 items-center font-semibold">
-                    <Link href={'/'}>PERSONALOG</Link>
                     {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                   </div>
                 </div>
