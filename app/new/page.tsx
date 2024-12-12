@@ -8,8 +8,8 @@ export default async function NewPage() {
   const userId = session.user?.id;
 
   return (
-    <main className="min-h-screen">
-      <h2>New Entry</h2>
+    <main className="min-h-screen flex flex-col gap-4">
+      <h2 className="font-bold">What's On Your Mind?</h2>
       <MarkdownEditor userId={userId} />
     </main>
   );

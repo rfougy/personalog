@@ -22,7 +22,7 @@ export function MarkdownEditor({ userId }: { userId: string | undefined }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="flex items-center justify-between">
           <Toolbar actions={actions} />
           <TabsList>
@@ -35,7 +35,7 @@ export function MarkdownEditor({ userId }: { userId: string | undefined }) {
             className="w-full h-[calc(100vh-200px)] p-4 border resize-none rounded-md focus:outline-none focus:ring-2 focus:ring-foreground"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            placeholder="Start writing your entry here..."
+            placeholder="Start writing here..."
           />
         </TabsContent>
         <TabsContent value="preview">

@@ -37,7 +37,7 @@ export const CreateEntryButton: React.FC<{
 
   return (
     <Button type="submit" variant={'outline'} onClick={createEntry}>
-      Create Test Entry
+      Publish
     </Button>
   );
 };
