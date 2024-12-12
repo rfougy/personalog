@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { CreateEntryButton } from '../supabase-data/components';
 import { MarkdownEditor } from './components/markdown-editor';
 
 export default async function NewPage() {
@@ -10,7 +9,7 @@ export default async function NewPage() {
 
   return (
     <main className="min-h-screen">
-      <h2>New Page</h2>
+      <h2>New Entry</h2>
       <MarkdownEditor />
     </main>
   );
