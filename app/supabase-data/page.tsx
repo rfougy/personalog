@@ -1,53 +1,60 @@
 import { createClient } from '@/utils/supabase/server';
+import { CreateEntryButton, CreateLogButton } from './components';
 
 export default async function SupabaseDataPage() {
   const supabase = await createClient();
 
+  // Check if the user is signed in
+  const { data: session, error } = await supabase.auth.getUser();
+
+  // Extract the user ID from the session
+  const userId = session.user?.id;
+
   const [
     { data: entries, error: entriesError },
-    { data: hashtags, error: hashtagsError },
     { data: logs, error: logsError },
-    { data: metadata, error: metadataError },
-    { data: entriesHashtags, error: entriesHashtagsError },
     { data: entriesLogs, error: entriesLogsError },
-    { data: entriesMetadata, error: entriesMetadataError },
+    { data: usersEntries, error: usersEntriesError },
+    { data: usersLogs, error: usersLogsError },
   ] = await Promise.all([
     supabase.from('entries').select('*'),
-    supabase.from('hashtags').select('*'),
     supabase.from('logs').select('*'),
-    supabase.from('metadata').select('*'),
-    supabase
-      .from('entries_hashtags')
-      .select('entry_id, hashtag_id, hashtags(*), entries(*)'),
     supabase
       .from('entries_logs')
       .select('entry_id, log_id, logs(*), entries(*)'),
-    supabase
-      .from('entries_metadata')
-      .select('entry_id, metadata_id, metadata(*), entries(*)'),
+    supabase.from('users_entries').select('*'),
+    supabase.from('users_logs').select('*'),
   ]);
 
   // Log errors if any
   if (entriesError) console.error('Entries Error:', entriesError);
-  if (hashtagsError) console.error('Hashtags Error:', hashtagsError);
   if (logsError) console.error('Logs Error:', logsError);
-  if (metadataError) console.error('Metadata Error:', metadataError);
-  if (entriesHashtagsError)
-    console.error('Entries Hashtags Error:', entriesHashtagsError);
   if (entriesLogsError) console.error('Entries Logs Error:', entriesLogsError);
-  if (entriesMetadataError)
-    console.error('Entries Metadata Error:', entriesMetadataError);
+  if (usersEntriesError)
+    console.error('Users Entries Error:', usersEntriesError);
+  if (usersLogsError) console.error('Users Logs Error:', usersLogsError);
 
   // Combine data for rendering, including data from junction tables and related entries
   const combinedData = {
     entries,
-    hashtags,
     logs,
-    metadata,
-    entriesHashtags,
     entriesLogs,
-    entriesMetadata,
+    usersEntries,
+    usersLogs,
   };
 
-  return <pre>{JSON.stringify(combinedData, null, 2)}</pre>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h2>Create Data via User Account</h2>
+        {userId && <CreateEntryButton userId={userId} />}
+        {userId && <CreateLogButton userId={userId} />}
+        <div className="border bg-white" />
+      </div>
+      <div>
+        <h2>Raw Supabase Data</h2>
+        <pre>{JSON.stringify(combinedData, null, 2)}</pre>
+      </div>
+    </div>
+  );
 }

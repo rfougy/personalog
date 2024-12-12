@@ -66,4 +66,9 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 500;
+  }
 }
