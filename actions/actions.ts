@@ -2,10 +2,10 @@
 
 import { createClient } from '@/utils/supabase/server';
 
-export const insertAction = async (
+export const insertAction = async <T>(
   table: string,
   query: { [key: string]: any }
-) => {
+): Promise<T | null> => {
   try {
     const supabase = await createClient();
 
@@ -34,7 +34,7 @@ export const insertAction = async (
     }
 
     console.log(`Data successfully inserted into table "${table}":`, data);
-    return data;
+    return data as T;
   } catch (err) {
     console.error('Unexpected error occurred:', err);
     return null;
