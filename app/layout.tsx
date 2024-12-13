@@ -22,6 +22,11 @@ export const metadata = {
   description: 'The fastest way to build apps with Next.js and Supabase',
 };
 
+interface Profile {
+  user_id: string;
+  profiles: Tables<'profiles'>;
+}
+
 export default async function RootLayout({
   children,
 }: {
@@ -33,7 +38,7 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const data = await fetchAndFilterAction<Tables<'profiles'>[]>(
+  const data = await fetchAndFilterAction<Profile[]>(
     false,
     'users_profiles',
     'profiles(*), user_id',
@@ -41,7 +46,7 @@ export default async function RootLayout({
     user?.id as string
   );
 
-  const profile = data && data[0];
+  const profile = data && data[0].profiles;
   const name =
     profile && profile.name && profile.nickname
       ? profile.nickname
