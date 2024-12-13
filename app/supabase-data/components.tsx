@@ -4,11 +4,17 @@ import { Button } from '@/components/ui/button';
 import { insertAction } from '../../actions/actions';
 import { useToast } from '@/hooks/use-toast';
 
-export const CreateEntryButton: React.FC<{
+interface CreateEntryButtonProps {
   userId: string;
   title: string;
   content: string;
-}> = ({ userId, title, content }) => {
+}
+
+export function CreateEntryButton({
+  userId,
+  title,
+  content,
+}: CreateEntryButtonProps) {
   const { toast } = useToast();
 
   const createEntry = async () => {
@@ -36,4 +42,4 @@ export const CreateEntryButton: React.FC<{
       Publish
     </Button>
   );
-};
+}
