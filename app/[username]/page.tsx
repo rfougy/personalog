@@ -9,9 +9,10 @@ interface UserProfileProps {
 export default async function UserProfile({ params }: UserProfileProps) {
   const supabase = await createClient();
 
-  const { username } = params;
+  const { username } = await params;
 
-  const { data: profile, error } = await supabase
+  // fetch profile data
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('username', username)
@@ -21,10 +22,26 @@ export default async function UserProfile({ params }: UserProfileProps) {
     ? profile?.nickname
     : profile?.name.split(' ')[0];
 
-  return error ? (
+  // fetch user
+  const {
+    data: { user_id },
+    error: userError,
+  } = await supabase
+    .from('users_profiles')
+    .select('user_id')
+    .eq('profile_id', profile.id)
+    .single();
+
+  // fetch entries
+  const { data: entries, error: entriesError } = await supabase
+    .from('entries')
+    .select('*')
+    .eq('created_by', user_id);
+
+  return profileError ? (
     <div>
       <h1>User not found</h1>
-      <p>{error.message}</p>
+      <p>{profileError.message}</p>
     </div>
   ) : (
     <main className="min-h-screen flex flex-col gap-4">
