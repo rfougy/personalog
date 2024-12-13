@@ -1,50 +1,49 @@
+import { fetchAndFilterAction } from '@/actions/actions';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { createClient } from '@/utils/supabase/server';
+import { Tables } from '@/database.types';
 
-interface UserProfileProps {
-  params: {
-    username: string;
-  };
-}
+type UserProfileProps = Promise<{
+  username: string;
+}>;
 
-export default async function UserProfile({ params }: UserProfileProps) {
-  const supabase = await createClient();
+export default async function UserProfile(props: { params: UserProfileProps }) {
+  const { username } = await props.params;
 
-  const { username } = await params;
+  const profile = await fetchAndFilterAction<Tables<'profiles'>>(
+    true,
+    'profiles',
+    '*',
+    'username',
+    username
+  );
 
-  // fetch profile data
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('username', username)
-    .single();
+  if (!profile) {
+    return <p>Profile not found.</p>;
+  }
 
-  const name = profile?.nickname
-    ? profile?.nickname
-    : profile?.name.split(' ')[0];
+  const name = profile.nickname
+    ? profile.nickname
+    : profile.name
+      ? profile.name.split(' ')[0]
+      : 'User';
 
-  // fetch user
-  const {
-    data: { user_id },
-    error: userError,
-  } = await supabase
-    .from('users_profiles')
-    .select('user_id')
-    .eq('profile_id', profile.id)
-    .single();
+  const user = await fetchAndFilterAction<{ user_id: string }>(
+    true,
+    'users_profiles',
+    'user_id',
+    'profile_id',
+    String(profile.id)
+  );
 
-  // fetch entries
-  const { data: entries, error: entriesError } = await supabase
-    .from('entries')
-    .select('*')
-    .eq('created_by', user_id);
+  const entries = await fetchAndFilterAction<Tables<'entries'>[]>(
+    false,
+    'entries',
+    '*',
+    'created_by',
+    user ? user.user_id : ''
+  );
 
-  return profileError ? (
-    <div>
-      <h1>User not found</h1>
-      <p>{profileError.message}</p>
-    </div>
-  ) : (
+  return (
     <main className="min-h-screen flex flex-col gap-4">
       <h2 className="font-bold">{name}'s Personalog</h2>
       <div className="flex flex-col gap-2">

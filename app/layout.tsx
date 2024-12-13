@@ -9,6 +9,8 @@ import './globals.css';
 import { ToastProvider } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
 import { createClient } from '@/utils/supabase/server';
+import { fetchAndFilterAction } from '@/actions/actions';
+import { Tables } from '@/database.types';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,6 +21,11 @@ export const metadata = {
   title: 'Next.js and Supabase Starter Kit',
   description: 'The fastest way to build apps with Next.js and Supabase',
 };
+
+interface Profile {
+  user_id: string;
+  profiles: Tables<'profiles'>;
+}
 
 export default async function RootLayout({
   children,
@@ -31,23 +38,22 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase
-    .from('users_profiles')
-    .select(
-      `
-        profiles(*),
-        user_id
-      `
-    )
-    .eq('user_id', user?.id);
-
-  if (error) console.error(error);
+  const data = await fetchAndFilterAction<Profile[]>(
+    false,
+    'users_profiles',
+    'profiles(*), user_id',
+    'user_id',
+    user?.id as string
+  );
 
   const profile = data && data[0].profiles;
-  const name = profile?.nickname
-    ? profile?.nickname
-    : profile?.name.split(' ')[0];
-  const username = profile?.username;
+  const name =
+    profile && profile.name && profile.nickname
+      ? profile.nickname
+        ? profile.nickname
+        : profile.name.split(' ')[0]
+      : null;
+  const username = profile && profile.username;
 
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
@@ -67,7 +73,7 @@ export default async function RootLayout({
                     <div className="flex gap-2 items-center font-semibold">
                       {user ? (
                         <Link href={`/${username}`}>
-                          {name.toUpperCase()}'S PERSONALOG
+                          {name && `${name.toUpperCase()}'S `}PERSONALOG
                         </Link>
                       ) : (
                         <Link href={'/'}>PERSONALOG</Link>

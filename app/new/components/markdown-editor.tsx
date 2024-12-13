@@ -5,8 +5,8 @@ import { useMarkdownEditor } from '../hooks/useMarkdownEditor';
 import { Toolbar } from './toolbar';
 import { Preview } from './preview';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { CreateEntryButton } from '@/app/supabase-data/components';
 import { Input } from '@/components/ui/input';
+import { PublishButton } from './publish-button';
 
 export function MarkdownEditor({ userId }: { userId: string | undefined }) {
   const [activeTab, setActiveTab] = useState<string>('write');
@@ -45,7 +45,7 @@ export function MarkdownEditor({ userId }: { userId: string | undefined }) {
         </TabsContent>
       </Tabs>
       {userId && (
-        <CreateEntryButton userId={userId} title={title} content={value} />
+        <PublishButton userId={userId} title={title} content={value} />
       )}
     </div>
   );
