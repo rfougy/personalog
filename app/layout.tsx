@@ -10,6 +10,7 @@ import { ToastProvider } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
 import { createClient } from '@/utils/supabase/server';
 import { fetchAndFilterAction } from '@/actions/actions';
+import { Tables } from '@/database.types';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -32,7 +33,7 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const data = await fetchAndFilterAction(
+  const data = await fetchAndFilterAction<Tables<'profiles'>[]>(
     false,
     'users_profiles',
     'profiles(*), user_id',
@@ -40,9 +41,14 @@ export default async function RootLayout({
     user?.id as string
   );
 
-  const profile = data[0].profiles;
-  const name = profile.nickname ? profile.nickname : profile.name.split(' ')[0];
-  const username = profile.username;
+  const profile = data && data[0];
+  const name =
+    profile && profile.name && profile.nickname
+      ? profile.nickname
+        ? profile.nickname
+        : profile.name.split(' ')[0]
+      : null;
+  const username = profile && profile.username;
 
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
@@ -62,7 +68,7 @@ export default async function RootLayout({
                     <div className="flex gap-2 items-center font-semibold">
                       {user ? (
                         <Link href={`/${username}`}>
-                          {name.toUpperCase()}'S PERSONALOG
+                          {name && `${name.toUpperCase()}'S `}PERSONALOG
                         </Link>
                       ) : (
                         <Link href={'/'}>PERSONALOG</Link>

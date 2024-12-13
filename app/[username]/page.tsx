@@ -1,5 +1,6 @@
 import { fetchAndFilterAction } from '@/actions/actions';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tables } from '@/database.types';
 
 interface UserProfileProps {
   params: {
@@ -10,7 +11,7 @@ interface UserProfileProps {
 export default async function UserProfile({ params }: UserProfileProps) {
   const { username } = await params;
 
-  const profile = await fetchAndFilterAction(
+  const profile = await fetchAndFilterAction<Tables<'profiles'>>(
     true,
     'profiles',
     '*',
@@ -18,22 +19,31 @@ export default async function UserProfile({ params }: UserProfileProps) {
     username
   );
 
-  const name = profile.nickname ? profile.nickname : profile.name.split(' ')[0];
+  // Check if profile is null before proceeding
+  if (!profile) {
+    return <p>Profile not found.</p>; // Handle profile not found
+  }
 
-  const user = await fetchAndFilterAction(
+  const name = profile.nickname
+    ? profile.nickname
+    : profile.name
+      ? profile.name.split(' ')[0]
+      : 'User';
+
+  const user = await fetchAndFilterAction<{ user_id: string }>(
     true,
     'users_profiles',
     'user_id',
     'profile_id',
-    profile.id
+    String(profile.id)
   );
 
-  const entries = await fetchAndFilterAction(
+  const entries = await fetchAndFilterAction<Tables<'entries'>[]>(
     false,
     'entries',
     '*',
     'created_by',
-    user.user_id
+    user ? user.user_id : ''
   );
 
   return (

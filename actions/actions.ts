@@ -41,13 +41,13 @@ export const insertAction = async (
   }
 };
 
-export const fetchAndFilterAction = async (
+export const fetchAndFilterAction = async <T>(
   fetchSingleData: boolean,
   table: string,
   selection: string,
   filterBy: string,
   filterVal: string
-): Promise<any | null> => {
+): Promise<T | null> => {
   try {
     const supabase = await createClient();
 
@@ -79,7 +79,7 @@ export const fetchAndFilterAction = async (
     }
 
     console.log(`Data successfully fetched from table "${table}":`, data);
-    return data;
+    return data as T;
   } catch (err) {
     console.error('Unexpected error occurred:', err);
     return null;
