@@ -50,7 +50,6 @@ export default async function AuthButton() {
   }
   return user ? (
     <div className="flex items-center gap-4">
-      {user.email}
       <Button asChild size="sm" variant={'outline'}>
         <Link href="/new">+</Link>
       </Button>

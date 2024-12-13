@@ -8,6 +8,7 @@ import Link from 'next/link';
 import './globals.css';
 import { ToastProvider } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
+import { createClient } from '@/utils/supabase/server';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,11 +20,35 @@ export const metadata = {
   description: 'The fastest way to build apps with Next.js and Supabase',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data, error } = await supabase
+    .from('users_profiles')
+    .select(
+      `
+        profiles(*),
+        user_id
+      `
+    )
+    .eq('user_id', user?.id);
+
+  if (error) console.error(error);
+
+  const profile = data && data[0].profiles;
+  const name = profile?.nickname
+    ? profile?.nickname
+    : profile?.name.split(' ')[0];
+  const username = profile?.username;
+
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
@@ -40,7 +65,13 @@ export default function RootLayout({
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                   <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                     <div className="flex gap-2 items-center font-semibold">
-                      <Link href={'/'}>PERSONALOG</Link>
+                      {user ? (
+                        <Link href={`/${username}`}>
+                          {name.toUpperCase()}'S PERSONALOG
+                        </Link>
+                      ) : (
+                        <Link href={'/'}>PERSONALOG</Link>
+                      )}
                       <ThemeSwitcher />
                     </div>
                     <div className="flex gap-2 items-center font-semibold">
