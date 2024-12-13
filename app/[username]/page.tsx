@@ -1,3 +1,4 @@
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { createClient } from '@/utils/supabase/server';
 
 interface UserProfileProps {
@@ -46,6 +47,19 @@ export default async function UserProfile({ params }: UserProfileProps) {
   ) : (
     <main className="min-h-screen flex flex-col gap-4">
       <h2 className="font-bold">{name}'s Personalog</h2>
+      <div className="flex flex-col gap-2">
+        {entries &&
+          entries.map((entry) => (
+            <Card
+              key={entry.id}
+              className="hover:shadow-md transition-shadow hover:bg-accent hover:text-accent-foreground cursor-pointer"
+            >
+              <CardHeader className="py-4">
+                <CardTitle className="text-base">{entry.title}</CardTitle>
+              </CardHeader>
+            </Card>
+          ))}
+      </div>
     </main>
   );
 }
