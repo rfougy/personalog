@@ -8,11 +8,12 @@ export default async function ProtectedPage() {
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect('/sign-in');
-  }
+  if (authError) console.error('Error fetching user session:', authError);
+
+  if (!user) return redirect('/sign-in');
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
