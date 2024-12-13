@@ -2,14 +2,12 @@ import { fetchAndFilterAction } from '@/actions/actions';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tables } from '@/database.types';
 
-interface UserProfileProps {
-  params: {
-    username: string;
-  };
-}
+type UserProfileProps = Promise<{
+  username: string;
+}>;
 
-export default async function UserProfile({ params }: UserProfileProps) {
-  const { username } = await params;
+export default async function UserProfile(props: { params: UserProfileProps }) {
+  const { username } = await props.params;
 
   const profile = await fetchAndFilterAction<Tables<'profiles'>>(
     true,
@@ -19,9 +17,8 @@ export default async function UserProfile({ params }: UserProfileProps) {
     username
   );
 
-  // Check if profile is null before proceeding
   if (!profile) {
-    return <p>Profile not found.</p>; // Handle profile not found
+    return <p>Profile not found.</p>;
   }
 
   const name = profile.nickname
