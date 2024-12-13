@@ -37,21 +37,3 @@ export const CreateEntryButton: React.FC<{
     </Button>
   );
 };
-
-export const CreateLogButton: React.FC<{ userId: string }> = ({ userId }) => {
-  const createEntry = async () => {
-    const log = await insertAction('logs', {
-      content: 'Test Log Submitted from App',
-      created_by: userId,
-    });
-
-    const logId = log && log[0].id;
-
-    await insertAction('users_logs', {
-      log_id: logId,
-      user_id: userId,
-    });
-  };
-
-  return <button onClick={createEntry}>Create Test Log</button>;
-};
