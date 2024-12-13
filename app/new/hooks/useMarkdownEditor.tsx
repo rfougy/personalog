@@ -38,14 +38,7 @@ export function useMarkdownEditor(initialValue: string = '') {
   const actions = {
     bold: () => insertText('**', '**'),
     italic: () => insertText('*', '*'),
-    bulletList: () => insertText('- '),
-    numberedList: () => insertText('1. '),
-    heading: () => insertText('# '),
-    quote: () => insertText('> '),
-    code: () => insertText('`', '`'),
-    codeBlock: () => insertText('```\n', '\n```'),
     link: () => insertText('[', '](url)'),
-    image: () => insertText('![alt text](', ')'),
   };
 
   return { value, handleChange, actions };
