@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { insertAction } from '../actions';
+import { insertAction } from '../../actions/actions';
 import { useToast } from '@/hooks/use-toast';
 
 export const CreateEntryButton: React.FC<{
