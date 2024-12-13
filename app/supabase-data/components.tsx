@@ -12,17 +12,15 @@ export const CreateEntryButton: React.FC<{
   const { toast } = useToast();
 
   const createEntry = async () => {
-    console.log('content: ', content);
     const entry = await insertAction('entries', {
       title: title,
       content: content,
       created_by: userId,
     });
-    console.log('Insert Result:', entry);
 
     const entryId = entry && entry[0].id;
 
-    const usersEntries = await insertAction('users_entries', {
+    await insertAction('users_entries', {
       entry_id: entryId,
       user_id: userId,
     });
@@ -31,8 +29,6 @@ export const CreateEntryButton: React.FC<{
       title: `'${title}' Created.`,
       description: `user: ${userId}, content: ${content}`,
     });
-
-    console.log('Insert Result:', usersEntries);
   };
 
   return (
@@ -48,15 +44,13 @@ export const CreateLogButton: React.FC<{ userId: string }> = ({ userId }) => {
       content: 'Test Log Submitted from App',
       created_by: userId,
     });
-    console.log('Insert Result:', log);
 
     const logId = log && log[0].id;
 
-    const usersLogs = await insertAction('users_logs', {
+    await insertAction('users_logs', {
       log_id: logId,
       user_id: userId,
     });
-    console.log('Insert Result:', usersLogs);
   };
 
   return <button onClick={createEntry}>Create Test Log</button>;

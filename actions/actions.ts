@@ -4,22 +4,39 @@ import { createClient } from '@/utils/supabase/server';
 
 export const insertAction = async (
   table: string,
-  query: { [title: string]: any }
+  query: { [key: string]: any }
 ) => {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const { data: session, error } = await supabase.auth.getUser();
+    const { data: session, error: authError } = await supabase.auth.getUser();
 
-  if (session) {
-    const { data, error } = await supabase.from(table).insert([query]).select();
-
-    if (error) {
-      console.error(`Error creating row in ${table}:`, error);
-    } else {
-      console.log(`New row created for ${table}:`, data);
-      return data;
+    if (authError) {
+      console.error('Error fetching user session:', authError);
+      return null;
     }
-  } else {
-    console.error('Error fetching user data:', error);
+
+    if (!session) {
+      console.error(
+        'No user session found. Please log in to perform this action.'
+      );
+      return null;
+    }
+
+    const { data, error: insertError } = await supabase
+      .from(table)
+      .insert([query])
+      .select();
+
+    if (insertError) {
+      console.error(`Error inserting data into table "${table}":`, insertError);
+      return null;
+    }
+
+    console.log(`Data successfully inserted into table "${table}":`, data);
+    return data;
+  } catch (err) {
+    console.error('Unexpected error occurred:', err);
+    return null;
   }
 };
