@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { insertAction } from '../../actions/actions';
+import { insertAction } from '@/actions/actions';
 import { useToast } from '@/hooks/use-toast';
 
 interface CreateEntryButtonProps {
@@ -10,7 +10,7 @@ interface CreateEntryButtonProps {
   content: string;
 }
 
-export function CreateEntryButton({
+export function PublishButton({
   userId,
   title,
   content,
