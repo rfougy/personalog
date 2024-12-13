@@ -9,6 +9,7 @@ import './globals.css';
 import { ToastProvider } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
 import { createClient } from '@/utils/supabase/server';
+import { fetchAndFilterAction } from '@/actions/actions';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -31,23 +32,17 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase
-    .from('users_profiles')
-    .select(
-      `
-        profiles(*),
-        user_id
-      `
-    )
-    .eq('user_id', user?.id);
+  const data = await fetchAndFilterAction(
+    false,
+    'users_profiles',
+    'profiles(*), user_id',
+    'user_id',
+    user?.id as string
+  );
 
-  if (error) console.error(error);
-
-  const profile = data && data[0].profiles;
-  const name = profile?.nickname
-    ? profile?.nickname
-    : profile?.name.split(' ')[0];
-  const username = profile?.username;
+  const profile = data[0].profiles;
+  const name = profile.nickname ? profile.nickname : profile.name.split(' ')[0];
+  const username = profile.username;
 
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>

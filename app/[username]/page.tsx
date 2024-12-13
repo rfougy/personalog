@@ -1,5 +1,5 @@
+import { fetchAndFilterAction } from '@/actions/actions';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { createClient } from '@/utils/supabase/server';
 
 interface UserProfileProps {
   params: {
@@ -8,43 +8,35 @@ interface UserProfileProps {
 }
 
 export default async function UserProfile({ params }: UserProfileProps) {
-  const supabase = await createClient();
-
   const { username } = await params;
 
-  // fetch profile data
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('username', username)
-    .single();
+  const profile = await fetchAndFilterAction(
+    true,
+    'profiles',
+    '*',
+    'username',
+    username
+  );
 
-  const name = profile?.nickname
-    ? profile?.nickname
-    : profile?.name.split(' ')[0];
+  const name = profile.nickname ? profile.nickname : profile.name.split(' ')[0];
 
-  // fetch user
-  const {
-    data: { user_id },
-    error: userError,
-  } = await supabase
-    .from('users_profiles')
-    .select('user_id')
-    .eq('profile_id', profile.id)
-    .single();
+  const user = await fetchAndFilterAction(
+    true,
+    'users_profiles',
+    'user_id',
+    'profile_id',
+    profile.id
+  );
 
-  // fetch entries
-  const { data: entries, error: entriesError } = await supabase
-    .from('entries')
-    .select('*')
-    .eq('created_by', user_id);
+  const entries = await fetchAndFilterAction(
+    false,
+    'entries',
+    '*',
+    'created_by',
+    user.user_id
+  );
 
-  return profileError ? (
-    <div>
-      <h1>User not found</h1>
-      <p>{profileError.message}</p>
-    </div>
-  ) : (
+  return (
     <main className="min-h-screen flex flex-col gap-4">
       <h2 className="font-bold">{name}'s Personalog</h2>
       <div className="flex flex-col gap-2">
