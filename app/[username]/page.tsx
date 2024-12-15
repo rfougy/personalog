@@ -1,6 +1,7 @@
 import { fetchAndFilterAction } from '@/actions/actions';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tables } from '@/database.types';
+import Link from 'next/link';
 
 type UserProfileProps = Promise<{
   username: string;
@@ -49,14 +50,16 @@ export default async function UserProfile(props: { params: UserProfileProps }) {
       <div className="flex flex-col gap-2">
         {entries &&
           entries.map((entry) => (
-            <Card
-              key={entry.id}
-              className="hover:shadow-md transition-shadow hover:bg-accent hover:text-accent-foreground cursor-pointer"
-            >
-              <CardHeader className="py-4">
-                <CardTitle className="text-base">{entry.title}</CardTitle>
-              </CardHeader>
-            </Card>
+            <Link href={`/${username}/entries/${entry.id}`}>
+              <Card
+                key={entry.id}
+                className="hover:shadow-md transition-shadow hover:bg-accent hover:text-accent-foreground cursor-pointer"
+              >
+                <CardHeader className="py-4">
+                  <CardTitle className="text-base">{entry.title}</CardTitle>
+                </CardHeader>
+              </Card>
+            </Link>
           ))}
       </div>
     </main>
