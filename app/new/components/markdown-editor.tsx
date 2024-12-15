@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useMarkdownEditor } from '../hooks/useMarkdownEditor';
 import { Toolbar } from './toolbar';
-import { Preview } from './preview';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { PublishButton } from './publish-button';
+import { MarkdownContent } from '@/components/markdown-content';
 
 export function MarkdownEditor({ userId }: { userId: string | undefined }) {
   const [activeTab, setActiveTab] = useState<string>('write');
@@ -40,7 +40,9 @@ export function MarkdownEditor({ userId }: { userId: string | undefined }) {
         </TabsContent>
         <TabsContent value="preview">
           <div className="border rounded-md h-[calc(100vh-200px)] overflow-auto">
-            <Preview content={value} />
+            <div className="p-4 prose max-w-none">
+              <MarkdownContent content={value} />
+            </div>
           </div>
         </TabsContent>
       </Tabs>
