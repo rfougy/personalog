@@ -1,4 +1,5 @@
 import { fetchAndFilterAction } from '@/actions/actions';
+import { MarkdownContent } from '@/components/markdown-content';
 import { Tables } from '@/database.types';
 
 type EntryProps = Promise<{
@@ -22,8 +23,11 @@ export default async function Entry(props: { params: EntryProps }) {
 
   return (
     <article className="min-h-screen flex flex-col gap-4">
-      <p>{entry.title}</p>
-      <p>{entry.content}</p>
+      <h2>{entry.title}</h2>
+      <div className="border" />
+      <MarkdownContent
+        content={entry.content ? entry.content : 'Entry content not found.'}
+      />
     </article>
   );
 }
